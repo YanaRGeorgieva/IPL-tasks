@@ -147,3 +147,9 @@ removeLastConjDot(Tokens, Tokens, []):-
     \+ append(_, [[tconjuction, ","]|_], Tokens), !.
 removeLastConjDot(Tokens, Tokens, []):-
     \+ append(_, [[tdot, "."]|_], Tokens), !.
+
+onlyWhites(Cmd):- string_codes(Cmd, CodesChars), onlyWhitesH(CodesChars).
+
+onlyWhitesH([]).
+onlyWhitesH([H|T]):- char_type(H, white), onlyWhitesH(T).
+

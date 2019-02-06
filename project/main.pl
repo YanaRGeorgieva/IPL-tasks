@@ -73,6 +73,9 @@ startCycleTillQuit(Message, TokenStream, Filename) :-
     switchOptions(Command, Message, TokenStream, Filename).
 
 
+switchOptions(Command, Message, TokenStream, Filename) :-
+    onlyWhites(Command),
+    startCycleTillQuit(Message, TokenStream, Filename).
 switchOptions("help", Message, TokenStream, Filename) :-
     write(Message),
     startCycleTillQuit(Message, TokenStream, Filename).
