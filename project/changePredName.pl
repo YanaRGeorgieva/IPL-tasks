@@ -1,8 +1,8 @@
 changeNameOfXPredicate(Tokens, NewTokens) :-
-    write("Enter name of predicate: "),
+    write("Enter the name of predicate: "),
     current_stream(0, read, ReadStream),
     read_line_to_codes(ReadStream, NameCode),
-    write("Enter name of new predicate name: "),
+    write("Enter a new name: "),
     current_stream(0, read, ReadStream),
     read_line_to_codes(ReadStream, NewNameCode),
     (   predicate(NewNameCode, _, _),
