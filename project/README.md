@@ -4,7 +4,7 @@
 
 1. Where is X defined (first encountering in clause for variable)? returns list of "line number, predicate name".
 2. Where is X defined (all encounterings of clause in program for predicate where it is the head of a clause)? returns list of "line number".
-3. Where is X used (all encounterings of variable in clauses)? returns list of "line number, predicate name".
+3. Where is X used (all encounterings of variable in clauses except first encounters)? returns list of "line number, predicate name".
 4. Where is X used (all encounterings of clause in program for predicate where it is in the body of a clause)? returns list of "line number, predicate name".
 
 ## Lets you refactor the code a bit:
@@ -15,11 +15,11 @@
 
 #### How to install and use SWI-Prolog
 
-+ [How to install SWI-Prolog](https://wwu-pi.github.io/tutorials/lectures/lsp/010_install_swi_prolog.html)
+-   [How to install SWI-Prolog](https://wwu-pi.github.io/tutorials/lectures/lsp/010_install_swi_prolog.html)
 
-+ [Quick start on how to use it](http://www.swi-prolog.org/pldoc/man?section=quickstart)
+-   [Quick start on how to use it](http://www.swi-prolog.org/pldoc/man?section=quickstart)
 
-+ [Command line options](http://www.swi-prolog.org/pldoc/man?section=cmdline)
+-   [Command line options](http://www.swi-prolog.org/pldoc/man?section=cmdline)
 
 #### Added bash script for executing program after successful installation of SWI-Prolog on a Unix or Unix-like variants
 
@@ -27,8 +27,8 @@
 
 #### For the curious who want to find about DCG Grammar rules :
 
-+ [SWI-Prolog/DCG](http://www.swi-prolog.org/pldoc/man?section=DCG)
+-   [SWI-Prolog/DCG](http://www.swi-prolog.org/pldoc/man?section=DCG)
 
-+ [Wikibooks](https://en.wikibooks.org/wiki/Prolog/Definite_Clause_Grammars)
+-   [Wikibooks](https://en.wikibooks.org/wiki/Prolog/Definite_Clause_Grammars)
 
-+ [A tutorial](http://www.pathwayslms.com/swipltuts/dcg/)
+-   [A tutorial](http://www.pathwayslms.com/swipltuts/dcg/)
