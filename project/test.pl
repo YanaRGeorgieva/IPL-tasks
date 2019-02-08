@@ -29,9 +29,9 @@ d1(V, A, X) :-
     d1(V, B, X).
 ?-d(1, 1).
 move([V1, V2, V3, V4], [Y1, Y2, Y3, Y4], [X1, X2, X3, X4]) :-
-    max(M, [Y1, Y2, Y3, Y4]),
-    incrementIfNotFirst(V1, M, Y1, X1),
-    incrementIfNotFirst(V2, M, Y2, X2),
+    max(M, [Y1, Y2, Y3, Y4])
+    ,incrementIfNotFirst(V1, M, Y1, X1),incrementIfNotFirst(V2, M, Y2, X2)
+    ,
     incrementIfNotFirst(V3, M, Y3, X3),
     incrementIfNotFirst(V4, M, Y4, X4).
 

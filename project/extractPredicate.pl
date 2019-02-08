@@ -186,16 +186,34 @@ continueExtract(PredNameCode, Info, FirstPart, MiddlePart, EndPart, Tok, FirstTo
 createMiniPredicate(NewPredName, VarsPred, MiddlePart, NewPredicate, Tok) :-
     addAnds(VarsPred, VarsAnds),
     anyFirstConj(MiddlePart),
+    anyLastConj(MiddlePart),
     append([[tconjuction, ","], [tpredicate, NewPredName], [tleftParen, "("]],
            VarsAnds,
            L1),
     append(L1, [[trightParen, ")"], Tok, [execNL, "\n"]], NewPredicate).
 
+createMiniPredicate(NewPredName, VarsPred, MiddlePart, NewPredicate, _) :-
+    addAnds(VarsPred, VarsAnds),
+    anyFirstConj(MiddlePart),
+    \+ anyLastConj(MiddlePart),
+    append([[tconjuction, ","], [tpredicate, NewPredName], [tleftParen, "("]],
+           VarsAnds,
+           L1),
+    append(L1, [[trightParen, ")"], [execNL, "\n"]], NewPredicate).
+
 createMiniPredicate(NewPredName, VarsPred, MiddlePart, NewPredicate, Tok) :-
     addAnds(VarsPred, VarsAnds),
     \+ anyFirstConj(MiddlePart),
+    anyLastConj(MiddlePart),
     append([[tpredicate, NewPredName], [tleftParen, "("]], VarsAnds, L1),
     append(L1, [[trightParen, ")"], Tok, [execNL, "\n"]], NewPredicate).
+
+createMiniPredicate(NewPredName, VarsPred, MiddlePart, NewPredicate, _) :-
+    addAnds(VarsPred, VarsAnds),
+    \+ anyFirstConj(MiddlePart),
+    \+ anyLastConj(MiddlePart),
+    append([[tpredicate, NewPredName], [tleftParen, "("]], VarsAnds, L1),
+    append(L1, [[trightParen, ")"], [execNL, "\n"]], NewPredicate).
 
 createLargePredicate(NewPredName, VarsPred, MiddlePart, NewPredicate) :-
     addAnds(VarsPred, VarsAnds),

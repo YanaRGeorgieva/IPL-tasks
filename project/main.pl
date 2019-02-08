@@ -18,7 +18,7 @@
 :- set_prolog_flag(verbose, silent).
 :- initialization(main, main).
 main :-
-    readyToWork("Code Refactoring Tool for Prolog written in Prolog!\nChoose one of the option in the following list by typing \"i\":\nCan answer questions like:\n1. Where is X defined (first encountering in clause for variable)?\n\tReturns list of \"line number, predicate name\".\n2. Where is X defined (all encounterings of clause in program for predicate where it is the head of a clause)?\n\tReturns list of \"line number\".\n3. Where is X used (all encounterings of variable in clauses)?\n\tReturns list of \"line number, predicate name\".\n4. Where is X used (all encounterings of clause in program for predicate where it is in the body of a clause)?\n\tReturns list of \"line number, predicate name\".\nCan refactor the code a bit:\n5. Can rename variable identifier in a given program and let's you choose which one.\n\tReturns a list of \"predicate name a.k.a. the whole predicate definition\".\n6. Can rename predicate identifier in a given program.\n7. Extract predicate from longer clause. Creates a new predicate whose name will be $predicate_name (user defined) and will be situated at the end of the file.\nExit me by typing \"quit\" or if you want a new file to edit, then type \"switch\".\nYou can save changes to file with \"save\".\nYou can ask for help with \"help\"."),
+    readyToWork("Code Refactoring Tool for Prolog written in Prolog!\nChoose one of the option in the following list by typing \"i\":\nCan answer questions like:\n1. Where is X defined (first encountering in clause for variable)?\n\tReturns list of \"line number, predicate name\".\n2. Where is X defined (all encounterings of clause in program for predicate where it is the head of a clause)?\n\tReturns list of \"line number\".\n3. Where is X used (all encounterings of variable in clauses except first encounters)?\n\tReturns list of \"line number, predicate name\".\n4. Where is X used (all encounterings of clause in program for predicate where it is in the body of a clause)?\n\tReturns list of \"line number, predicate name\".\nCan refactor the code a bit:\n5. Can rename variable identifier in a given program and let's you choose which one.\n\tReturns a list of \"predicate name a.k.a. the whole predicate definition\".\n6. Can rename predicate identifier in a given program.\n7. Extract predicate from longer clause. Creates a new predicate whose name will be $predicate_name (user defined) and will be situated at the end of the file.\nExit me by typing \"quit\" or if you want a new file to edit, then type \"switch\".\nYou can save changes to file with \"save\".\nYou can ask for help with \"help\"."),
     halt.
 main :-
     halt(1).
@@ -75,39 +75,42 @@ startCycleTillQuit(Message, TokenStream, Filename) :-
 
 switchOptions(Command, Message, TokenStream, Filename) :-
     onlyWhites(Command),
-    startCycleTillQuit(Message, TokenStream, Filename).
+    startCycleTillQuit(Message, TokenStream, Filename), !.
 switchOptions("help", Message, TokenStream, Filename) :-
     write(Message),
-    startCycleTillQuit(Message, TokenStream, Filename).
+    startCycleTillQuit(Message, TokenStream, Filename), !.
 switchOptions("quit", _, _, _) :-
     write("Bye!"),
     nl.
 switchOptions("save", Message, TokenStream, Filename) :-
     saveToFile(TokenStream),
-    startCycleTillQuit(Message, TokenStream, Filename).
+    startCycleTillQuit(Message, TokenStream, Filename), !.
 switchOptions("switch", Message, _, _) :-
     readyToWork(Message).
 switchOptions("print", Message, TokenStream, Filename) :-
     writeToConsole(TokenStream),
-    startCycleTillQuit(Message, TokenStream, Filename).
+    startCycleTillQuit(Message, TokenStream, Filename), !.
 switchOptions("1", Message, TokenStream, Filename) :-
     whereIsXDefinedVariable(TokenStream),
-    startCycleTillQuit(Message, TokenStream, Filename).
+    startCycleTillQuit(Message, TokenStream, Filename), !.
 switchOptions("2", Message, TokenStream, Filename) :-
     whereIsXDefinedPredicate(TokenStream),
-    startCycleTillQuit(Message, TokenStream, Filename).
+    startCycleTillQuit(Message, TokenStream, Filename), !.
 switchOptions("3", Message, TokenStream, Filename) :-
     whereIsXUsedVariable(TokenStream),
-    startCycleTillQuit(Message, TokenStream, Filename).
+    startCycleTillQuit(Message, TokenStream, Filename), !.
 switchOptions("4", Message, TokenStream, Filename) :-
     whereIsXUsedPredicate(TokenStream),
-    startCycleTillQuit(Message, TokenStream, Filename).
+    startCycleTillQuit(Message, TokenStream, Filename), !.
 switchOptions("5", Message, TokenStream, Filename) :-
     changeNameOfXVariable(TokenStream, NewTokenStream),
-    startCycleTillQuit(Message, NewTokenStream, Filename).
+    startCycleTillQuit(Message, NewTokenStream, Filename), !.
 switchOptions("6", Message, TokenStream, Filename) :-
     changeNameOfXPredicate(TokenStream, NewTokenStream),
-    startCycleTillQuit(Message, NewTokenStream, Filename).
+    startCycleTillQuit(Message, NewTokenStream, Filename), !.
 switchOptions("7", Message, TokenStream, Filename) :-
     extractPredicate(TokenStream, NewTokenStream),
-    startCycleTillQuit(Message, NewTokenStream, Filename).
+    startCycleTillQuit(Message, NewTokenStream, Filename), !.
+switchOptions(_, Message, TokenStream, Filename) :-
+    write("Bad command.\n"),
+    startCycleTillQuit(Message, TokenStream, Filename), !.
