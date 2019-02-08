@@ -70,6 +70,8 @@ token([tdcg, "-->"]) -->
 
 token([tarrow, "->"]) -->
     "->", !.
+token([tifElse, "*->"]) -->
+    "*->", !.
 token([tgoal, "?-"]) -->
     "?-", !.
 token([tneck, ":-"]) -->

@@ -2,15 +2,21 @@ extractPredicate(TokenStream, NewTokenStream) :-
     write("Enter start line: "),
     current_stream(0, read, ReadStream),
     read_line_to_codes(ReadStream, StartLineCode),
-    number_codes(StartLine, StartLineCode),
     write("Enter end line: "),
     current_stream(0, read, ReadStream),
     read_line_to_codes(ReadStream, EndLineCode),
-    number_codes(EndLine, EndLineCode),
+    string_chars(StringStartLine, StartLineCode),
+    term_string(TSL, StringStartLine),
+    string_chars(StringEndLine, EndLineCode),
+    term_string(TEL, StringEndLine),
+    (   number(TSL),
+        number_codes(StartLine, StartLineCode),
+        number(TEL),
+        number_codes(EndLine, EndLineCode),
+        extract(StartLine, EndLine, TokenStream, NewTokenStream)
+    ;   write("Bad number.\n")
+    ).
     % write([StartLine, EndLine]),
-    extract(StartLine, EndLine, TokenStream, NewTokenStream).
-
-
 getLineStartAndEnd(StartLine, StartLine, Tokens, [Info, Content], A, B) :-
     append(A, [[Info, Content]|B], Tokens),
     append(_, [[tlineNumber, StartLine]|_], Content),
@@ -192,10 +198,21 @@ createMiniPredicate(NewPredName, VarsPred, MiddlePart, NewPredicate, Tok) :-
            L1),
     append(L1, [[trightParen, ")"], Tok, [execNL, "\n"]], NewPredicate).
 
-createMiniPredicate(NewPredName, VarsPred, MiddlePart, NewPredicate, _) :-
+createMiniPredicate(NewPredName, VarsPred, MiddlePart, NewPredicate, Tok) :-
     addAnds(VarsPred, VarsAnds),
     anyFirstConj(MiddlePart),
     \+ anyLastConj(MiddlePart),
+    Tok==[tdot, "."],
+    append([[tconjuction, ","], [tpredicate, NewPredName], [tleftParen, "("]],
+           VarsAnds,
+           L1),
+    append(L1, [[trightParen, ")"], [tdot, "."], [execNL, "\n"]], NewPredicate).
+
+createMiniPredicate(NewPredName, VarsPred, MiddlePart, NewPredicate, Tok) :-
+    addAnds(VarsPred, VarsAnds),
+    anyFirstConj(MiddlePart),
+    \+ anyLastConj(MiddlePart),
+    Tok\=[tdot, "."],
     append([[tconjuction, ","], [tpredicate, NewPredName], [tleftParen, "("]],
            VarsAnds,
            L1),
@@ -208,12 +225,21 @@ createMiniPredicate(NewPredName, VarsPred, MiddlePart, NewPredicate, Tok) :-
     append([[tpredicate, NewPredName], [tleftParen, "("]], VarsAnds, L1),
     append(L1, [[trightParen, ")"], Tok, [execNL, "\n"]], NewPredicate).
 
-createMiniPredicate(NewPredName, VarsPred, MiddlePart, NewPredicate, _) :-
+createMiniPredicate(NewPredName, VarsPred, MiddlePart, NewPredicate, Tok) :-
     addAnds(VarsPred, VarsAnds),
     \+ anyFirstConj(MiddlePart),
     \+ anyLastConj(MiddlePart),
+    Tok\=[tdot, "."],
     append([[tpredicate, NewPredName], [tleftParen, "("]], VarsAnds, L1),
     append(L1, [[trightParen, ")"], [execNL, "\n"]], NewPredicate).
+
+createMiniPredicate(NewPredName, VarsPred, MiddlePart, NewPredicate, Tok) :-
+    addAnds(VarsPred, VarsAnds),
+    \+ anyFirstConj(MiddlePart),
+    \+ anyLastConj(MiddlePart),
+    Tok==[tdot, "."],
+    append([[tpredicate, NewPredName], [tleftParen, "("]], VarsAnds, L1),
+    append(L1, [[trightParen, ")"], [tdot, "."], [execNL, "\n"]], NewPredicate).
 
 createLargePredicate(NewPredName, VarsPred, MiddlePart, NewPredicate) :-
     addAnds(VarsPred, VarsAnds),
